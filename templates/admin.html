@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>eartharoid GO</title>
+	<meta charset='UTF-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<meta name='theme-color' content='#009999'>
+	<meta name='title' content='eartharoid GO'>
+	<meta name='og:title' content='eartharoid GO' />
+	<meta name='og:site_name' content='eartharoid GO' />
+	<meta name='description' content='Serverless URL shortener'>
+	<meta name='og:description' content='Serverless URL shortener' />
+	<meta name='url' content='/'>
+	<meta name='og:url' content='/' />
+	<meta name='og:image' content='/logo.png' />
+
+	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css'>
+	<link rel='stylesheet' href='https://jenil.github.io/bulmaswatch/darkly/bulmaswatch.min.css'>
+	<link rel='icon' href='/favicon.ico' type='image/icon'>
+	<script defer src='https://use.fontawesome.com/releases/v5.14.0/js/all.js'></script>
+
+	<style>
+		select,
+		input[type='text'],
+		input[type='text']:placeholder-shown,
+		input[type='password'],
+		input[type='password']:placeholder-shown {
+			background-color: black !important;
+			color: white !important;
+		}
+
+		input[type='text']::placeholder,
+		input[type='password']::placeholder {
+			color: grey !important;
+		}
+	</style>
+
+</head>
+
+<body>
+	<section class='section'>
+		<container class='container box has-text-centered'>
+			<!-- <img class='block is-rounded' src='/logo.png' style='width:128px;'> -->
+			<a href='/' class='button is-small my-5 is-outlined is-link'>
+				<span class='icon'>
+					<i class='fas fa-long-arrow-alt-left'></i>
+					<!-- <i class='fas fa-chevron-left'></i> -->
+				</span>
+				<span>
+					Create a new short URL
+				</span>
+			</a>
+
+			<div class='table-container'>
+				<table class='table is-bordered is-striped is-hoverable is-fullwidth'>
+					<thead>
+						<tr>
+							%%th%%
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							%%th%%
+						</tr>
+					</tfoot>
+					<tbody>
+						%%tr%%
+					</tbody>
+				</table>
+			</div>
+
+		</container>
+		<p class='has-text-centered'>
+			&copy; 2021 <a href='https://eartharoid.me'>Isaac Saunders</a>
+		</p>
+	</section>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+{
+	"random_length": 8,
+	"reserved": [
+		"admin",
+		"api",
+		"login"
+	]
+}

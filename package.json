@@ -1,0 +1,28 @@
+{
+  "name": "eartharoid-go",
+  "version": "1.0.0",
+  "description": "A serverless URL shortener",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eartharoid/eartharoid-go.git"
+  },
+  "keywords": [
+    "vercel",
+    "faunadb",
+    "serverless",
+    "url",
+    "shortener"
+  ],
+  "author": "eartharoid",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eartharoid/eartharoid-go/issues"
+  },
+  "homepage": "https://github.com/eartharoid/eartharoid-go#readme",
+  "dependencies": {
+    "firebase-admin": "^9.4.2"
+  }
+}

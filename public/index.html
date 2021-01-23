@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>eartharoid GO</title>
+	<meta charset='UTF-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<meta name='theme-color' content='#009999'>
+	<meta name='title' content='eartharoid GO'>
+	<meta name='og:title' content='eartharoid GO' />
+	<meta name='og:site_name' content='eartharoid GO' />
+	<meta name='description' content='Serverless URL shortener'>
+	<meta name='og:description' content='Serverless URL shortener' />
+	<meta name='url' content='/'>
+	<meta name='og:url' content='/' />
+	<meta name='og:image' content='/logo.png' />
+
+	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css'>
+	<link rel='stylesheet' href='https://jenil.github.io/bulmaswatch/darkly/bulmaswatch.min.css'>
+	<link rel='icon' href='/favicon.ico' type='image/icon'>
+	<script defer src='https://use.fontawesome.com/releases/v5.14.0/js/all.js'></script>
+
+	<style>
+		select,
+		input[type='text'],
+		input[type='text']:placeholder-shown,
+		input[type='password'],
+		input[type='password']:placeholder-shown {
+			background-color: black !important;
+			color: white !important;
+		}
+
+		input[type='text']::placeholder,
+		input[type='password']::placeholder {
+			color: grey !important;
+		}
+
+		#successMessage,
+		#errorMessage {
+			display: none;
+		}
+
+		#shortURL {
+			background-color: white !important;
+			color: black !important;
+			text-align: center;
+		}
+	</style>
+
+</head>
+
+<body>
+	<section class='section'>
+		<container class='container box has-text-centered' style='max-width:500px;'>
+			<img class='block is-rounded' src='/logo.png' style='width:128px;'>
+
+			<!-- <article class='message is-danger'>
+				<div class='message-header'>
+					<p>Error</p>
+				</div>
+				<div class='message-body'>
+					You're stupid.
+				</div>
+			</article> -->
+
+			<div id='successMessage' class='notification is-success'>
+				<a id='successQR' class='button is-white is-outlined' target='_blank'>
+					<span>QR Code</span>
+					<span class='icon'>
+						<i class='fas fa-external-link-alt'></i>
+					</span>
+				</a>
+				<div class='mt-4'>
+					<div class='field has-addons has-addons-centered'>
+						<div class='control' style='width:100%;'>
+							<input id='shortURL' class='input is-white' type='text' value='' readonly>
+						</div>
+						<div class='control'>
+							<button class='button is-white' onclick='copy(this);'>
+								<span class='icon'>
+									<i class='fas fa-copy'></i>
+								</span>
+								<span>Copy</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id='errorMessage' class='notification is-danger'></div>
+
+			<form id='form' action='/api/create' method='POST' onsubmit='shorten(event, this)'>
+				<fieldset>
+					<label class='label'>URL</label>
+					<div class='field has-addons has-addons-centered'>
+						<div class='control'>
+							<span class='select'>
+								<select name='protocol'>
+									<option>https://</option>
+									<option>http://</option>
+								</select>
+							</span>
+						</div>
+						<div class='control has-icons-left' style='width:100%;'>
+							<input type='text' name='long' class='input' placeholder='www.amazon.co.uk'
+								autocomplete='off' required onchange='deurlize(this);'>
+							<span class='icon is-small is-left'>
+								<i class='fas fa-link'></i>
+							</span>
+						</div>
+					</div>
+
+					<div class='field'>
+						<label class='label'>Name <span class='is-size-6'>(optional)</span></label>
+						<div class='control has-icons-left'>
+							<input type='text' name='slug' class='input' placeholder='amazon' autocomplete='off' oninput='slugify(this);' onchange='slugify(this, true);'>
+							<span class='icon is-small is-left'>
+								<i class='fas fa-font'></i>
+							</span>
+						</div>
+					</div>
+
+					<div class='field'>
+						<label class='label'>Admin password</label>
+						<div class='control has-icons-left'>
+							<input type='password' name='password' class='input' placeholder='**********'
+								autocomplete='off'>
+							<span class='icon is-small is-left'>
+								<i class='fas fa-key'></i>
+							</span>
+						</div>
+					</div>
+
+					<div class='field'>
+						<div class='control'>
+							<button id='button' type='submit' class='button is-info is-fullwidth mt-5'>
+								<span>Shorten</span>
+								<!-- <span class='icon'>
+									<i class='fas fa-chevron-right'></i>
+								</span> -->
+							</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+
+			<a href='/admin' class='button is-small mt-5 is-outlined is-link'>
+				<span>
+					Admin dashboard
+				</span>
+				<span class='icon'>
+					<i class='fas fa-long-arrow-alt-right'></i>
+					<!-- <i class='fas fa-chevron-right'></i> -->
+				</span>
+			</a>
+		</container>
+		<p class='has-text-centered'>
+			&copy; 2021 <a href='https://eartharoid.me'>Isaac Saunders</a>
+		</p>
+	</section>
+
+	<script>
+		const button = document.getElementById('button');
+		const errorMessage = document.getElementById('errorMessage');
+		const successMessage = document.getElementById('successMessage');
+		const successQR = document.getElementById('successQR');
+		const shortURL = document.getElementById('shortURL');
+
+		function getValue(name) {
+			return document.getElementsByName(name)[0].value;
+		}
+
+		function shorten(e, form) {
+			e.preventDefault();
+
+			button.classList.add('is-loading');
+			successMessage.style.display = 'none';
+			errorMessage.style.display = 'none';
+
+			fetch(form.action, {
+					method: form.method,
+					body: JSON.stringify({
+						protocol: getValue('protocol'),
+						url: getValue('long'),
+						slug: getValue('slug'),
+						password: getValue('password')
+					}),
+					headers: {
+						'Content-Type': 'application/json'
+					},
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						errorMessage.style.display = 'none';
+						successQR.href = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${data.short}`;
+						successMessage.style.display = 'block';
+						shortURL.value = data.short;
+						shortURL.select();
+						shortURL.setSelectionRange(0, shortURL.value.length); // mobile
+						console.log(data)
+						form.reset();
+					} else {
+						successMessage.style.display = 'none';
+						errorMessage.innerText = data.message;
+						errorMessage.style.display = 'block';
+					}
+				})
+				.catch(error => {
+					console.log(error.message);
+					successMessage.style.display = 'none';
+					errorMessage.innerText = 'An error occurred; please check the developer console.';
+					errorMessage.style.display = 'block';
+				})
+				.finally(() => {
+					button.classList.remove('is-loading');
+				});
+		}
+
+		function slugify (element, away) {
+			element.value = element.value
+				.replace(/(\/)?(\+)?/g, '')
+				.replace(/#\S*/g, '')
+				.replace(/\?\S*/g, '')
+				.replace(/\s/g, '-');
+			if (element.value.startsWith('-') || element.value.endsWith('-')) {
+				element.classList.add('is-danger');
+				if (away) {
+					errorMessage.innerText = 'Short URL name must not begin or end with a hyphen.';
+					errorMessage.style.display = 'block';
+				}
+			} else {
+				element.classList.remove('is-danger');
+				errorMessage.style.display = 'none';
+			}
+		}
+
+		function deurlize (element) {
+		element.value = element.value
+			.replace(/^http(s)?:\/\//i, '');
+		}
+
+		function copy (button) {
+			shortURL.select();
+			shortURL.setSelectionRange(0, shortURL.value.length); // mobile
+			document.execCommand('copy');
+			button.innerHTML = 
+				`<span class='icon'>
+					<i class='fas fa-check'></i>
+				</span>
+				<span>Copied</span>`
+		}
+	</script>
+</body>
+
+</html>
