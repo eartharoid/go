@@ -10,13 +10,15 @@ firebase.initializeApp({
 });
 
 const db = firebase.firestore();
-const links = db.collection('urls');
 
 module.exports = async (req, res) => {
 
 	let { password } = req.query;
 
-	if ((password !== process.env.ADMIN_PASSWORD) && (req.cookies.password !== hash(process.env.ADMIN_PASSWORD))) {
+	if (password !== process.env.ADMIN_PASSWORD
+		&& req.cookies?.password !== hash(process.env.ADMIN_PASSWORD)
+		&& hash(req.cookies?.password) !== hash(process.env.ADMIN_PASSWORD)) {
+		console.log('Someone tried to list all URLs with the wrong password');
 		return res.status(401).json({
 			status: 401,
 			message: 'Unauthorized (invalid password)'
@@ -26,7 +28,7 @@ module.exports = async (req, res) => {
 	let links = {};
 
 	const urlsRef = db.collection('urls');
-	const snapshot = await urlsRef.get();
+	const snapshot = await urlsRef.orderBy('created', 'desc').get();
 	snapshot.forEach(doc => {
 		links[doc.id] = doc.data();
 	});

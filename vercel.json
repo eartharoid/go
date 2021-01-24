@@ -1,7 +1,7 @@
 {
 	"rewrites": [
 		{ "source": "/", "destination": "/index.html" },
-		{ "source": "/admin", "destination": "/api/login" },
-		{ "source": "/:url", "destination": "/api/redirect?url=:url" }
+		{ "source": "/admin", "destination": "/api/admin" },
+		{ "source": "/:id*", "destination": "/api/redirect?id=:id*" }
 	]
 }

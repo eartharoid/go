@@ -1,12 +1,12 @@
 # eartharoid-go
 
-A serverless URL shortener.
+A serverless URL shortener, made with Vercel and Firestore.
 
-Uses Firestore (was going to use FaunaDB but I didn't understand the docs) for storage and Vercel serverless functions.
+URLs data is stored in Firestore because FaunaDB was too complicated.
 
 ## API endpoints
 
-- POST `/api/create`
-- GET `/api/get`
-- GET `/api/list`
-- GET `/api/redirect`
+- `/api/create`
+- `/api/get`
+- `/api/list`
+- `/api/redirect`

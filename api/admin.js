@@ -18,13 +18,14 @@ module.exports = (req, res) => {
 		let { password } = req.body;
 
 		if (password !== process.env.ADMIN_PASSWORD) {
+			console.log('Someone tried to access the admin dashboard with the wrong password');
 			return res.status(401).json({
 				status: 401,
 				message: 'Unauthorized (invalid password)'
 			});
 		}
 
-		res.setHeader('Set-Cookie', `password=${hash(password)}`)
+		res.setHeader('Set-Cookie', `password=${hash(password)}`);
 		return res.status(200).send(admin);
 	}
 

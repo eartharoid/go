@@ -16,10 +16,20 @@ module.exports = async (req, res) => {
 
 	let { password, name } = req.query;
 
-	if ((password !== process.env.ADMIN_PASSWORD) && (req.cookies.password !== hash(process.env.ADMIN_PASSWORD))) {
+	if (password !== process.env.ADMIN_PASSWORD
+		&& req.cookies?.password !== hash(process.env.ADMIN_PASSWORD)
+		&& hash(req.cookies?.password) !== hash(process.env.ADMIN_PASSWORD)) {
+		console.log('Someone tried to get a URL with the wrong password');
 		return res.status(401).json({
 			status: 401,
 			message: 'Unauthorized (invalid password)'
+		});
+	}
+
+	if (!name) {
+		return res.status(400).json({
+			status: 400,
+			message: 'No short URL name provided'
 		});
 	}
 

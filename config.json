@@ -1,4 +1,5 @@
 {
+	"collect": "is_eu,city,region,region_code,country_name,country_code,continent_name,continent_code",
 	"random_length": 8,
 	"reserved": [
 		"admin",
