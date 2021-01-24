@@ -6,6 +6,7 @@ module.exports = (req, res) => {
 	/**
 	 * req.headers.referer
 	 */
+	// https://ipdata.co/
 	res.status(200).send(`REDIRECT ${url}`);
 	// res.redirect(308, url)
 }

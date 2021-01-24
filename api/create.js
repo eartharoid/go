@@ -1,7 +1,9 @@
 // create a new URL
 
 const config = require('../config.json');
+const { getClientIp } = require('@supercharge/request-ip');
 const { hash, random } = require('../functions.js');
+
 const firebase = require('firebase-admin');
 const serviceAccount = require('../firebase.json');
 
@@ -10,10 +12,9 @@ firebase.initializeApp({
 });
 
 const db = firebase.firestore();
-
 const links = db.collection('urls');
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
 	if (!req.body) {
 		return res.status(400).json({
 			status: 400,
@@ -54,21 +55,27 @@ module.exports = (req, res) => {
 			.trim();
 	}
 
-	let exists = false;
-
-	if (exists || config.reserved.includes(slug)) {
-		return res.status(409).json({
-			status: 409,
-			message: 'Conflict: A short URL with this name already exists; please delete it to re-assign.'
-		});
-	}
-
 	url = protocol + url
 		.replace(/^http(s)?:\/\//i, '')
 		.trim();
 	url = encodeURI(url);
 
-	
+	const urlRef = links.doc(slug);
+	const doc = await urlRef.get();
+	if (doc.exists || config.reserved.includes(slug)) {
+		return res.status(409).json({
+			status: 409,
+			message: 'Conflict: A short URL with this name already exists; please delete it to re-assign.'
+		});
+	}	
+
+	await links.doc(slug).set({
+		clicks: [],
+		created: new Date(),
+		creator: getClientIp(req),
+		name: slug,
+		url: url
+	});
 
 	res.status(200).send({
 		success: true,

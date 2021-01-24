@@ -2,7 +2,7 @@
 
 A serverless URL shortener.
 
-Uses [Fauna](https://fauna.com/) for storage and Vercel serverless functions.
+Uses Firestore (was going to use FaunaDB but I didn't understand the docs) for storage and Vercel serverless functions.
 
 ## API endpoints
 
