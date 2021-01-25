@@ -2,6 +2,7 @@
 	"rewrites": [
 		{ "source": "/", "destination": "/index.html" },
 		{ "source": "/admin", "destination": "/api/admin" },
+		{ "source": "/:id*\\+", "destination": "/api/stats?id=:id*" },
 		{ "source": "/:id*", "destination": "/api/redirect?id=:id*" }
 	]
 }

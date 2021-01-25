@@ -35,6 +35,17 @@
 		input[type='password']::placeholder {
 			color: grey !important;
 		}
+
+		#successMessage,
+		#errorMessage {
+			display: none;
+		}
+
+		#shortURL {
+			background-color: white !important;
+			color: black !important;
+			text-align: center;
+		}
 	</style>
 
 </head>
@@ -52,6 +63,75 @@
 					Create a new short URL
 				</span>
 			</a>
+
+			<div id='successMessage' class='notification is-success'>
+				<a id='successQR' class='button is-white is-outlined' target='_blank'>
+					<span>QR Code</span>
+					<span class='icon'>
+						<i class='fas fa-external-link-alt'></i>
+					</span>
+				</a>
+				<div class='mt-4'>
+					<div class='field has-addons has-addons-centered'>
+						<div class='control' style='width:100%;'>
+							<input id='shortURL' class='input is-white' type='text' value='' readonly>
+						</div>
+						<div class='control'>
+							<button class='button is-white' onclick='copy(this);'>
+								<span class='icon'>
+									<i class='fas fa-copy'></i>
+								</span>
+								<span>Copy</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id='errorMessage' class='notification is-danger'></div>
+
+			<form id='form' action='/api/create' method='POST' onsubmit='shorten(event, this)' class='level'>
+				<fieldset class='level-left'>
+					<div class='field has-addons has-addons-centered level-item'>
+						<div class='control'>
+							<span class='select'>
+								<select name='protocol'>
+									<option>https://</option>
+									<option>http://</option>
+								</select>
+							</span>
+						</div>
+						<div class='control has-icons-left'>
+							<input type='text' name='long' class='input' placeholder='Long URL' autocomplete='off'
+								required onchange='deurlize(this);'>
+							<span class='icon is-small is-left'>
+								<i class='fas fa-link'></i>
+							</span>
+						</div>
+					</div>
+
+					<div class='field level-item'>
+						<div class='control has-icons-left'>
+							<input type='text' name='slug' class='input' placeholder='Name (optional)'
+								autocomplete='off' oninput='slugify(this);' onchange='slugify(this, true);'>
+							<span class='icon is-small is-left'>
+								<i class='fas fa-font'></i>
+							</span>
+						</div>
+					</div>
+
+					<div class='level-item'>
+						<div class='control'>
+							<button id='button' type='submit' class='button is-info'>
+								<span>Shorten</span>
+								<!-- <span class='icon'>
+									<i class='fas fa-chevron-right'></i>
+								</span> -->
+							</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
 
 			<div class='table-container'>
 				<table class='table is-bordered is-striped is-hoverable is-fullwidth'>
@@ -76,6 +156,7 @@
 			&copy; 2021 <a href='https://eartharoid.me'>Isaac Saunders</a>
 		</p>
 	</section>
+	<script defer src='/create.js'></script>
 </body>
 
 </html>
