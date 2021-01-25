@@ -3,10 +3,10 @@
 const { hash } = require('../functions.js');
 
 const firebase = require('firebase-admin');
-const serviceAccount = require('../firebase.json');
+
 
 firebase.initializeApp({
-	credential: firebase.credential.cert(serviceAccount)
+	credential: firebase.credential.cert(JSON.parse(process.env.FIREBASE))
 });
 
 const db = firebase.firestore();

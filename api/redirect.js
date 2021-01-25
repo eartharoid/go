@@ -7,10 +7,10 @@ const fetch = require('node-fetch');
 
 const firebase = require('firebase-admin');
 const { FieldValue } = firebase.firestore;
-const serviceAccount = require('../firebase.json');
+
 
 firebase.initializeApp({
-	credential: firebase.credential.cert(serviceAccount)
+	credential: firebase.credential.cert(JSON.parse(process.env.FIREBASE))
 });
 
 const db = firebase.firestore();
