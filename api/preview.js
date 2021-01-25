@@ -1,6 +1,9 @@
-// get information about a URL
+// get preview
 
-const { hash } = require('../functions.js');
+const { readFileSync } = require('fs');
+const { join } = require('path');
+
+let preview = readFileSync(join(__dirname, '../templates/preview.html'), 'utf8');
 
 const firebase = require('firebase-admin');
 const serviceAccount = require('../firebase.json');
@@ -14,17 +17,7 @@ const links = db.collection('urls');
 
 module.exports = async (req, res) => {
 
-	let { password, id } = req.query;
-
-	if (password !== process.env.ADMIN_PASSWORD
-		&& req.cookies.password !== hash(process.env.ADMIN_PASSWORD)
-		&& hash(req.cookies.password) !== hash(process.env.ADMIN_PASSWORD)) {
-		console.log('Someone tried to get a URL with the wrong password');
-		return res.status(401).json({
-			status: 401,
-			message: 'Unauthorized (invalid password)'
-		});
-	}
+	let { id } = req.query;
 
 	if (!id) {
 		return res.status(400).json({
@@ -43,5 +36,6 @@ module.exports = async (req, res) => {
 		});
 	}
 
-	res.status(200).json(doc.data());
+	return res.status(200)
+		.send(preview.replace(/%%ID%%/gmi, id));
 };

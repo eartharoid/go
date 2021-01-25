@@ -25,42 +25,21 @@
 
 <body>
 	<section class='section'>
-		<container class='container box has-text-centered'>
-			<!-- <img class='block is-rounded' src='/logo.png' style='width:128px;'> -->
-			<a href='/' class='button is-small my-5 is-outlined is-link'>
-				<span class='icon'>
-					<i class='fas fa-long-arrow-alt-left'></i>
-					<!-- <i class='fas fa-chevron-left'></i> -->
-				</span>
-				<span>
-					Create a new short URL
-				</span>
-			</a>
+		<container class='container box has-text-centered' style='max-width:500px;'>
+			<img class='block is-rounded' src='/logo.png' style='width:128px;'>
 
-			<div class='table-container'>
-				<table class='table is-bordered is-striped is-hoverable is-fullwidth'>
-					<thead>
-						<tr>
-							%%th%%
-						</tr>
-					</thead>
-					<tfoot>
-						<tr>
-							%%th%%
-						</tr>
-					</tfoot>
-					<tbody>
-						%%tr%%
-					</tbody>
-				</table>
-			</div>
+			<p id='id'></p>
 
 		</container>
 		<p class='has-text-centered'>
 			&copy; 2021 <a href='https://eartharoid.me'>Isaac Saunders</a>
 		</p>
 	</section>
-	<script defer src='/create.js'></script>
+	
+	<script>
+		const ID = '%%ID%%';
+		document.getElementById('id').innerText = ID;
+	</script>
 </body>
 
 </html>

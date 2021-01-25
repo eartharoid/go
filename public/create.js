@@ -5,7 +5,7 @@ const successQR = document.getElementById('successQR');
 const shortURL = document.getElementById('shortURL');
 
 function getValue(name) {
-	return document.getElementsByName(name)[0]?.value;
+	return document.getElementsByName(name)[0].value;
 }
 
 function shorten(e, form) {

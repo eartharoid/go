@@ -3,10 +3,12 @@ const config = require('./config.json');
 
 module.exports = {
 	hash(password) {
-		return crypto
-			.createHash('sha256')
-			.update(password)
-			.digest('base64');
+		if (password) {
+			return crypto
+				.createHash('sha256')
+				.update(password)
+				.digest('base64');
+		}
 	},
 	random(length = config.random_length) {
 		let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

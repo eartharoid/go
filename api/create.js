@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
 		return res.status(400).json({
 			status: 400,
 			message: 'Bad Request'
-		})
+		});
 	}
 
 	let {
@@ -38,8 +38,8 @@ module.exports = async (req, res) => {
 	}
 
 	if (password !== process.env.ADMIN_PASSWORD
-		&& req.cookies?.password !== hash(process.env.ADMIN_PASSWORD)
-		&& hash(req.cookies?.password) !== hash(process.env.ADMIN_PASSWORD)) {
+		&& req.cookies.password !== hash(process.env.ADMIN_PASSWORD)
+		&& hash(req.cookies.password) !== hash(process.env.ADMIN_PASSWORD)) {
 		return res.status(401).json({
 			status: 401,
 			message: 'Unauthorized (invalid password)'
@@ -63,7 +63,7 @@ module.exports = async (req, res) => {
 		.trim();
 	url = encodeURI(url);
 
-	const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/gm;
+	const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/gm;
 	if (!regex.test(url)) {
 		return res.status(400).json({
 			status: 400,
@@ -97,4 +97,4 @@ module.exports = async (req, res) => {
 		stats: `${req.headers.origin}/${slug}+`,
 		slug
 	});
-}
+};
