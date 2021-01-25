@@ -1,5 +1,6 @@
 // get information about a URL
 
+const config = require('../config.json');
 const { hash } = require('../functions.js');
 
 const firebase = require('firebase-admin');
@@ -43,5 +44,8 @@ module.exports = async (req, res) => {
 		});
 	}
 
-	res.status(200).json(doc.data());
+	let data = doc.data();
+	data.short = `${config.host}/${id}`;
+
+	res.status(200).json(data);
 };

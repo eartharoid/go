@@ -1,5 +1,7 @@
 // get preview
 
+const config = require('../config.json');
+
 const { readFileSync } = require('fs');
 const { join } = require('path');
 
@@ -36,6 +38,12 @@ module.exports = async (req, res) => {
 		});
 	}
 
-	return res.status(200)
-		.send(preview.replace(/%%ID%%/gmi, id));
+	let data = doc.data();
+
+	return res.status(200).send(
+		preview
+			.replace(/%%ID%%/gmi, id)
+			.replace(/%%SHORT%%/gmi, `${config.host}/${id}`)
+			.replace(/%%LONG%%/gmi, data.url)
+	);
 };

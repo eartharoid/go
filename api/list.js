@@ -1,5 +1,6 @@
 // get all URLs
 
+const config = require('../config.json');
 const { hash } = require('../functions.js');
 
 const firebase = require('firebase-admin');
@@ -25,12 +26,15 @@ module.exports = async (req, res) => {
 		});
 	}
 
-	let links = {};
+	let links = [];
 
 	const urlsRef = db.collection('urls');
 	const snapshot = await urlsRef.orderBy('created', 'desc').get();
 	snapshot.forEach(doc => {
-		links[doc.id] = doc.data();
+		let data = doc.data();
+		data.clicks = links[doc.id].clicks.length;
+		data.short = `${config.host}/${doc.id}`;
+		links.push(data);
 	});
 
 	res.status(200).json(links);

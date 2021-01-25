@@ -25,6 +25,7 @@
   "dependencies": {
     "@supercharge/request-ip": "^1.1.2",
     "firebase-admin": "^9.4.2",
+    "mustache": "^4.1.0",
     "node-fetch": "^2.6.1"
   }
 }

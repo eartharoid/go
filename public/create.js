@@ -1,4 +1,5 @@
 const button = document.getElementById('button');
+const copyButton = document.getElementById('copy');
 const errorMessage = document.getElementById('errorMessage');
 const successMessage = document.getElementById('successMessage');
 const successQR = document.getElementById('successQR');
@@ -12,6 +13,11 @@ function shorten(e, form) {
 	e.preventDefault();
 
 	button.classList.add('is-loading');
+	copyButton.innerHTML =
+		`<span class='icon'>
+					<i class='fas fa-copy'></i>
+				</span>
+				<span>Copy</span>`;
 	successMessage.style.display = 'none';
 	errorMessage.style.display = 'none';
 

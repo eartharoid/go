@@ -92,9 +92,9 @@ module.exports = async (req, res) => {
 	return res.status(200).send({
 		success: true,
 		long: url,
-		short: `${req.headers.origin}/${slug}`,
-		stats: `${req.headers.origin}/${slug}+`,
-		preview: `${req.headers.origin}/${slug}~`,
+		short: `${config.host}/${slug}`,
+		stats: `${config.host}/${slug}+`,
+		preview: `${config.host}/${slug}~`,
 		slug
 	});
 };

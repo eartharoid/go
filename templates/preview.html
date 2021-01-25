@@ -28,18 +28,38 @@
 		<container class='container box has-text-centered' style='max-width:500px;'>
 			<img class='block is-rounded' src='/logo.png' style='width:128px;'>
 
-			<p id='id'></p>
+			<div class='content mb-5'>
+				<h6>LINK PREVIEW</h6>
+				<p>
+					<b><span class='is-family-code'>%%ID%%</span> redirects to</b>
+					<br>
+					<a href='%%LONG%%'>%%LONG%%</a>
+				</p>
+			</div>
+
+			<div class='buttons is-centered my-4'>
+				<a href='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=%%SHORT%%' id='QR'
+					class='button is-info is-outlined' target='_blank'>
+					<span>QR Code</span>
+					<span class='icon'>
+						<i class='fas fa-external-link-alt'></i>
+					</span>
+				</a>
+				<a href='%%LONG%%' id='QR' class='button is-info' target='_blank'>
+					<span>Continue</span>
+					<span class='icon'>
+						<i class='fas fa-chevron-right'></i>
+					</span>
+				</a>
+			</div>
+
 
 		</container>
+
 		<p class='has-text-centered'>
 			&copy; 2021 <a href='https://eartharoid.me'>Isaac Saunders</a>
 		</p>
 	</section>
-	
-	<script>
-		const ID = '%%ID%%';
-		document.getElementById('id').innerText = ID;
-	</script>
 </body>
 
 </html>
