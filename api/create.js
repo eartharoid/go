@@ -94,6 +94,7 @@ module.exports = async (req, res) => {
 		long: url,
 		short: `${req.headers.origin}/${slug}`,
 		stats: `${req.headers.origin}/${slug}+`,
+		preview: `${req.headers.origin}/${slug}~`,
 		slug
 	});
 };
