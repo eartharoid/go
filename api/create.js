@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
 		// IF ONE ALREADY EXISTS WITH THIS SLUG, REGENERATE ANOTHER
 	} else {
 		slug = slug
-			.replace(/(\/)?(\+)?/g, '')
+			.replace(/(\/)?(\+)?(~)?/g, '')
 			.replace(/#\S*/g, '')
 			.replace(/\?\S*/g, '')
 			.replace(/\s/g, '-')
@@ -62,8 +62,8 @@ module.exports = async (req, res) => {
 		.trim();
 	url = encodeURI(url);
 
-	const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/gm;
-	if (!regex.test(url)) {
+	const { regex } = require('../globals.js');
+	if (!regex.url.test(url)) {
 		return res.status(400).json({
 			status: 400,
 			message: 'Invalid URL'

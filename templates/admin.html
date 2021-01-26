@@ -21,7 +21,7 @@
 	<link rel='icon' href='/favicon.ico' type='image/icon'>
 	<script defer src='https://use.fontawesome.com/releases/v5.14.0/js/all.js'></script>
 
-	<link rel='stylesheet' href='https://unpkg.com/gridjs/dist/theme/mermaid.min.css' />
+	<link rel='stylesheet' href='/jstable.css' />
 
 	<style>
 		select,
@@ -55,8 +55,35 @@
 				</span>
 			</a>
 
+			<div class='level'>
+				<div class='level-item has-text-centered'>
+					<div class='box'>
+						<p class='title'>27</p>
+						<p class='heading'>Links</p>
+					</div>
+				</div>
+				<div class='level-item has-text-centered'>
+					<div class='box'>
+						<p class='title'>1,741</p>
+						<p class='heading'>Total clicks</p>
+					</div>
+				</div>
+				<div class='level-item has-text-centered'>
+					<div class='box'>
+						<p class='title'>1,268</p>
+						<p class='heading'>Unique clicks</p>
+					</div>
+				</div>
+				<div class='level-item has-text-centered'>
+					<div class='box'>
+						<p class='title'>978</p>
+						<p class='heading'>Clickers</p>
+					</div>
+				</div>
+			</div>
+
 			<div class='table-container'>
-				<!-- <table id='dataTable' class='table is-bordered is-striped is-hoverable is-fullwidth'>
+				<table id='dataTable' class='table is-bordered is-striped is-hoverable is-fullwidth'>
 					<thead>
 						<tr>
 							<th>ID</th>
@@ -89,7 +116,7 @@
 							<th>Manage</th>
 						</tr>
 					</tfoot>
-				</table> -->
+				</table>
 			</div>
 
 		</container>
@@ -98,24 +125,37 @@
 		</p>
 	</section>
 
-	<script src='https://unpkg.com/gridjs'></script>
+	<script src='/jstable.js'></script>
 	<script>
-		let table = new Grid({
-			columns: ['ID', 'URL', 'Created', 'Creator', 'Clicks', 'Manage'],
-			// from: document.getElementById('dataTable'),
-			server: {
-				url: '/api/list',
-				then: data => data.results.map(link => [
-					`<a href='${link.url}' target='_blank'>${link.name}</a>`,
-					`<a href='${link.url}' target='_blank'>${link.url}</a>`
-					(new Date(link.created.seconds * 1000)).toLocaleString(),
-					link.creator,
-					link.clicks,
-					'buttons'
-				])
+		let table = new JSTable('#dataTable', {
+			perPage: 10,
+			perPageSelect: [10, 25, 50, 75, 100, 125, 150],
+			labels: {
+				placeholder: 'Search',
+				perPage: '{select} links per page',
+				noRows: 'No links found',
+				info: 'Showing {start} to {end} of {rows} links',
+				loading: 'Loading...',
+				infoFiltered: 'Showing {start} to {end} of {rows} links (filtered from {rowsTotal} links)'
 			},
-			search: true,
-		}).render(document.getElementsByClassName('table-container'));
+			classes: {
+				top: 'dt-top',
+				info: 'dt-info',
+				input: 'input',
+				table: 'dt-table',
+				bottom: 'dt-bottom',
+				search: 'dt-search',
+				sorter: 'dt-sorter',
+				wrapper: 'dt-wrapper',
+				dropdown: 'dt-dropdown',
+				ellipsis: 'dt-ellipsis',
+				selector: 'dt-selector',
+				container: 'dt-container',
+				pagination: 'pagination',
+				loading: 'dt-loading',
+				message: 'dt-message'
+			}
+		});
 	</script>
 </body>
 

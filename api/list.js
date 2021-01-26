@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
 	const snapshot = await urlsRef.orderBy('created', 'desc').get();
 	snapshot.forEach(doc => {
 		let data = doc.data();
-		data.clicks = links[doc.id].clicks.length;
+		data.clicks = data.clicks.length;
 		data.short = `${config.host}/${doc.id}`;
 		links.push(data);
 	});

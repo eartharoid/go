@@ -63,7 +63,7 @@ function shorten(e, form) {
 
 function slugify(element, away) {
 	element.value = element.value
-		.replace(/(\/)?(\+)?/g, '')
+		.replace(/(\/)?(\+)?(~)?/g, '')
 		.replace(/#\S*/g, '')
 		.replace(/\?\S*/g, '')
 		.replace(/\s/g, '-');
