@@ -19,7 +19,8 @@ firebase.initializeApp({
 });
 
 const db = firebase.firestore();
-const links = db.collection('urls');
+
+const mustache = require('mustache');
 
 module.exports = async (req, res) => {
 
@@ -29,7 +30,7 @@ module.exports = async (req, res) => {
 		return res.redirect(307, '/');
 	}
 
-	const urlRef = links.doc(id);
+	const urlRef = db.collection('urls').doc(id); // `urls/${id}`
 	const doc = await urlRef.get();
 
 	if (!doc.exists) {
@@ -52,9 +53,13 @@ module.exports = async (req, res) => {
 
 		if (!data.message) {
 			if (regex.collectIP.test(config.collect)) {
-				data.ip = hash(data.ip);
+				data.ip = hash(data.ip).replace(/\//g, '');
+				const userRef = db.doc(`clickers/${data.ip}`);
+				const doc = await userRef.get();
+				if (!doc.exists) {
+					await userRef.set(data);
+				}
 			}
-
 			for (let field in data) {
 				clicksData[field] = data[field];
 			}
@@ -65,14 +70,15 @@ module.exports = async (req, res) => {
 		clicks: FieldValue.arrayUnion(clicksData)
 	});
 
-	console.log(`Redirecting ${IP} to ${id}`);
+	console.log(`Displaying ${id} preview to ${IP}`);
 
 	let data = doc.data();
 
-	return res.status(200).send(
-		preview
-			.replace(/%%ID%%/gmi, id)
-			.replace(/%%SHORT%%/gmi, `${config.host}/${id}`)
-			.replace(/%%LONG%%/gmi, data.url)
-	);
+	preview = mustache.render(preview, {
+		id,
+		short: `${config.host}/${id}`,
+		long: data.url
+	});
+
+	return res.status(200).send(preview);
 };

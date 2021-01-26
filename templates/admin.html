@@ -58,25 +58,25 @@
 			<div class='level'>
 				<div class='level-item has-text-centered'>
 					<div class='box'>
-						<p class='title'>27</p>
+						<p class='title'>{{totalLinks}}</p>
 						<p class='heading'>Links</p>
 					</div>
 				</div>
 				<div class='level-item has-text-centered'>
 					<div class='box'>
-						<p class='title'>1,741</p>
+						<p class='title'>{{totalClicks}}</p>
 						<p class='heading'>Total clicks</p>
 					</div>
 				</div>
 				<div class='level-item has-text-centered'>
 					<div class='box'>
-						<p class='title'>1,268</p>
+						<p class='title'>{{uniqueClicks}}</p>
 						<p class='heading'>Unique clicks</p>
 					</div>
 				</div>
 				<div class='level-item has-text-centered'>
 					<div class='box'>
-						<p class='title'>978</p>
+						<p class='title'>{{clickers}}</p>
 						<p class='heading'>Clickers</p>
 					</div>
 				</div>
@@ -91,7 +91,7 @@
 							<th>Created</th>
 							<th>Creator</th>
 							<th>Clicks</th>
-							<th>Manage</th>
+							<th data-sortable="false">Manage</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -102,7 +102,23 @@
 							<td>{{created}}</td>
 							<td>{{creator}}</td>
 							<td>{{clicks}}</td>
-							<td>buttons</td>
+							<td class='has-text-centered'>
+								<a href='{{stats}}' class='button mx-1 is-info'>
+									<span class='icon'>
+										<i class='fas fa-chart-bar'></i>
+									</span>
+								</a>
+								<a class='button mx-1 is-warning has-text-white' onclick='editURL("{{name}}")'>
+									<span class='icon'>
+										<i class='fas fa-pencil-alt'></i>
+									</span>
+								</a>
+								<a class='button mx-1 is-danger' onclick='deleteURL("{{name}}")'>
+									<span class='icon'>
+										<i class='fas fa-trash-alt'></i>
+									</span>
+								</a>
+							</td>
 						</tr>
 						{{/links}}
 					</tbody>
@@ -156,6 +172,63 @@
 				message: 'dt-message'
 			}
 		});
+	</script>
+	<script>
+		function editURL(id) {
+			let newURL = prompt(`New long URL for '${id}':`);
+
+			if (newURL.length > 1) {
+				fetch(`/api/edit`, {
+						method: 'POST',
+						body: JSON.stringify({
+							id,
+							url: newURL,
+						}),
+						headers: {
+							'Content-Type': 'application/json'
+						},
+					})
+					.then(res => res.json())
+					.then(data => {
+						if (data.success) {
+							let reload = confirm(`Success.\nRefresh the page?`);
+							if (reload) {
+								window.location.reload(true);
+							}
+						} else {
+							alert(`Error: ${data.message}`);
+						}
+					});
+			}
+		}
+
+		function deleteURL(id) {
+			let confirmation = confirm(
+				`⚠️ DANGER ⚠️\n\nAre you sure you want to delete '${id}'?\nNote that clicks data will not be removed.`);
+
+			if (confirmation) {
+				fetch(`/api/delete`, {
+						method: 'POST',
+						body: JSON.stringify({
+							id,
+						}),
+						headers: {
+							'Content-Type': 'application/json'
+						},
+					})
+					.then(res => res.json())
+					.then(data => {
+						if (data.success) {
+							let reload = confirm(`Success.\n"${data.message}"\nRefresh the page?`);
+							if (reload) {
+								window.location.reload(true);
+							}
+						} else {
+							alert(`Error: ${data.message}`);
+						}
+					});
+			}
+		}
 	</script>
 </body>
 

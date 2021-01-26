@@ -31,21 +31,21 @@
 			<div class='content mb-5'>
 				<h6>LINK PREVIEW</h6>
 				<p>
-					<b><span class='is-family-code'>%%ID%%</span> redirects to</b>
+					<b><span class='is-family-code'>{{id}}</span> redirects to</b>
 					<br>
-					<a href='%%LONG%%'>%%LONG%%</a>
+					<a href='{{long}}'>{{long}}</a>
 				</p>
 			</div>
 
 			<div class='buttons is-centered my-4'>
-				<a href='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=%%SHORT%%' id='QR'
+				<a href='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{short}}' id='QR'
 					class='button is-info is-outlined' target='_blank'>
 					<span>QR Code</span>
 					<span class='icon'>
 						<i class='fas fa-external-link-alt'></i>
 					</span>
 				</a>
-				<a href='%%LONG%%' id='QR' class='button is-info' target='_blank'>
+				<a href='{{long}}' id='QR' class='button is-info' target='_blank'>
 					<span>Continue</span>
 					<span class='icon'>
 						<i class='fas fa-chevron-right'></i>

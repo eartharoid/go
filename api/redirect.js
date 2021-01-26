@@ -1,7 +1,8 @@
 // redirect to the long URL
 
 const config = require('../config.json');
-
+const { regex } = require('../globals.js');
+const { hash } = require('../functions.js');
 const { getClientIp } = require('@supercharge/request-ip');
 const fetch = require('node-fetch');
 
@@ -45,6 +46,14 @@ module.exports = async (req, res) => {
 		let data = await (await fetch(apiURL)).json();
 
 		if (!data.message) {
+			if (regex.collectIP.test(config.collect)) {
+				data.ip = hash(data.ip).replace(/\//g, '');
+				const userRef = db.doc(`clickers/${data.ip}`);
+				const doc = await userRef.get();
+				if (!doc.exists) {
+					await userRef.set(data);
+				}
+			}
 			for (let field in data) {
 				clicksData[field] = data[field];
 			}

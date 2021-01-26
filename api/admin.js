@@ -1,10 +1,11 @@
 // login
 
+const config = require('../config.json');
 const { hash } = require('../functions.js');
 const { readFileSync } = require('fs');
 const { join } = require('path');
 
-const Mustache = require('mustache');
+const mustache = require('mustache');
 
 const firebase = require('firebase-admin');
 
@@ -20,18 +21,33 @@ let login = readFileSync(join(__dirname, '../templates/login.html'), 'utf8');
 module.exports = async (req, res) => {
 
 	let links = [];
+	let totalClicks = 0;
+	let uniqueClicks = 0;
 
 	const urlsRef = db.collection('urls');
-	const snapshot = await urlsRef.orderBy('created', 'desc').get();
-	snapshot.forEach(doc => {
+	const urls_snapshot = await urlsRef.orderBy('created', 'desc').get();
+	urls_snapshot.forEach(doc => {
 		let data = doc.data();
+
+		totalClicks += data.clicks.length;
+		uniqueClicks += new Set(data.clicks.map(c => c.ip)).size;
+
 		data.clicks = data.clicks.length;
 		data.created = (new Date(data.created.seconds * 1000)).toLocaleString();
+		data.stats = `${config.host}/${doc.id}+`;
+
 		links.push(data);
 	});
 
-	admin = Mustache.render(admin, {
-		links
+	const clickers_snapshot = await db.collection('clickers').get();
+	let clickers = clickers_snapshot.size;
+
+	admin = mustache.render(admin, {
+		links,
+		totalLinks: links.length,
+		totalClicks,
+		uniqueClicks,
+		clickers
 	});
 
 	if (req.cookies && req.cookies.password === hash(process.env.ADMIN_PASSWORD)) {

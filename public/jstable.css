@@ -48,57 +48,6 @@
 	margin: 7px 0
 }
 
-.dt-input {
-	padding: 6px 12px
-}
-
-.dt-pagination ul {
-	margin: 0;
-	padding-left: 0
-}
-
-.dt-pagination ul li {
-	list-style: none;
-	float: left
-}
-
-.dt-pagination a,
-.dt-pagination span {
-	/* border: 1px solid transparent; */
-	float: left;
-	margin-left: 2px;
-	padding: 6px 12px;
-	position: relative;
-	text-decoration: none;
-	color: inherit
-}
-
-.dt-pagination a:hover {
-	/* background-color: #d9d9d9 */
-}
-
-.dt-pagination .active a,
-.dt-pagination .active a:focus,
-.dt-pagination .active a:hover {
-	/* background-color: #d9d9d9; */
-	cursor: default
-}
-
-.dt-pagination .dt-ellipsis span {
-	cursor: not-allowed
-}
-
-.dt-pagination .disabled a,
-.dt-pagination .disabled a:focus,
-.dt-pagination .disabled a:hover {
-	cursor: not-allowed;
-	opacity: 0.4
-}
-
-.dt-pagination .pager a {
-	font-weight: bold
-}
-
 .dt-table {
 	max-width: 100%;
 	width: 100%;
@@ -154,12 +103,12 @@
 }
 
 .dt-table th.dt-sorter::before {
-	border-top: 4px solid #000;
+	border-top: 4px solid white;
 	top: 18px
 }
 
 .dt-table th.dt-sorter::after {
-	border-bottom: 4px solid #000;
+	border-bottom: 4px solid white;
 	border-top: 4px solid transparent;
 	bottom: 22px
 }
