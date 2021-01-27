@@ -59,15 +59,16 @@ module.exports = async (req, res) => {
 			}
 			countries[c.country_name].count++;
 		}
-		if (c.referrer) {
-			if (!referrers[c.referrer]) {
-				referrers[c.referrer] = {
-					name: c.referrer,
-					count: 0
-				};
-			}
-			referrers[c.referrer].count++;	
+		if (!c.referrer) {
+			c.referrer = 'None (direct)';
 		}
+		if (!referrers[c.referrer]) {
+			referrers[c.referrer] = {
+				name: c.referrer,
+				count: 0
+			};
+		}
+		referrers[c.referrer].count++;
 	});
 
 	countries = Object.values(countries).sort((a, b) => b.count - a.count);
@@ -77,11 +78,16 @@ module.exports = async (req, res) => {
 		countries[i].position = i + 1;
 	}
 
+	let created = new Date(data.created.seconds * 1000);
+	let daysAgo = Math.ceil((new Date().getTime() - created.getTime()) / (1000 * 3600 * 24));
+
 	stats = mustache.render(stats, {
 		data: JSON.stringify(data),
 		id,
 		api_key: config.gmaps_key,
-		created: (new Date(data.created.seconds * 1000)).toLocaleString(),
+		created: created.toLocaleString(),
+		daysAgo,
+		dailyClicks: Math.round(totalClicks / daysAgo),
 		totalClicks,
 		uniqueClicks,
 		countries,

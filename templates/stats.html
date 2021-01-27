@@ -46,7 +46,7 @@
 		const ID = '{{id}}';
 
 		google.charts.load('current', {
-			packages: ['corechart', 'geochart'],
+			packages: ['corechart', 'geochart', 'line'],
 			mapsApiKey: '{{api_key}}',
 		});
 
@@ -55,9 +55,59 @@
 		async function drawCharts() {
 			// let data = await (await fetch(`/api/get?id=${ID}`)).json();
 			let data = {{&data}};
+			drawHistory(data);
 			drawLocations(data);
 			drawReferrers(data);
 		}
+
+		function drawHistory(data) {
+			let clicks = {};
+			data.clicks.forEach(c => {
+				let date = (new Date(c.time._seconds * 1000)).toLocaleDateString();
+				if (!clicks[date]) {
+					clicks[date] = 0;
+				}
+				clicks[date]++;		
+			});
+
+			let dataArray = [
+				['Date', 'Clicks'],
+			];
+
+			for (let c in clicks) {
+				dataArray.push([c, clicks[c]]);
+			}
+
+			let table = google.visualization.arrayToDataTable(dataArray);
+
+			let chart = new google.charts.Line(document.getElementById('history-chart'));
+			chart.draw(table, google.charts.Line.convertOptions({
+				title: 'Number of clicks (all time)',
+				titleTextStyle: {
+					color: 'white'
+				},
+				curveType: 'function',
+				backgroundColor: '#1F2424',
+				chartArea: {
+					backgroundColor: '#1F2424',
+					height: '800px'
+				},
+				vAxis: {
+					textStyle: {
+						color: 'white'
+					}
+				},
+				hAxis: {
+					textStyle: {
+						color: 'white'
+					}
+				},
+				legend: {
+					position: 'none'
+				},
+			}));
+		}
+
 
 		function drawLocations(data) {
 			let countries = {};
@@ -114,7 +164,7 @@
 			let refs = {};
 			data.clicks.forEach(c => {
 				if (!c.referrer) {
-					return;
+					c.referrer = 'None (direct)'
 				}
 				if (!refs[c.referrer]) {
 					refs[c.referrer] = 0;
@@ -123,14 +173,12 @@
 			});
 
 			let dataArray = [
-				['Referrer', 'Number'],
+				['referrer', 'Number'],
 			];
 
 			for (let r in refs) {
 				dataArray.push([r, refs[r]]);
 			}
-
-			console.log(dataArray)
 
 			let table = google.visualization.arrayToDataTable(dataArray);
 
@@ -148,8 +196,8 @@
 					color: 'white'
 				},
 				chartArea:{
-					width: '110%',
-					height: '110%'
+					width: '100%',
+					height: '100%'
 				}
 			});
 		}
@@ -163,9 +211,18 @@
 		<container class='container box has-text-centered'>
 			<!-- <img class='block is-rounded' src='/logo.png' style='width:128px;'> -->
 
+			<a href='/admin' class='button is-small my-5 is-outlined is-link'>
+				<span class='icon'>
+					<i class='fas fa-long-arrow-alt-left'></i>
+				</span>
+				<span>
+					Back to admin dashboard
+				</span>
+			</a>
+
 			<div class='content my-6' style='margin-top:1rem!important;'>
 				<h1 class='title mt-4'>{{id}}</h1>
-				<p class='subtitle'>{{created}}</p>
+				<p class='subtitle'>{{created}} ({{daysAgo}} days ago)</p>
 			</div>
 
 			<div class='level'>
@@ -179,6 +236,12 @@
 					<div class='box'>
 						<p class='title'>{{uniqueClicks}}</p>
 						<p class='heading'>Unique clicks</p>
+					</div>
+				</div>
+				<div class='level-item has-text-centered'>
+					<div class='box'>
+						<p class='title'>{{dailyClicks}}</p>
+						<p class='heading'>Avg. clicks/day</p>
 					</div>
 				</div>
 			</div>
@@ -209,7 +272,7 @@
 			</div>
 
 			<div id='tab0-container' class='tab-container' style='display: block;'>
-				0
+				<div id='history-chart' class='graph'></div>
 			</div>
 
 			<div id='tab1-container' class='tab-container'>

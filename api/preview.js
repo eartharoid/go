@@ -41,9 +41,9 @@ module.exports = async (req, res) => {
 		time: new Date()
 	};
 
-	let referer = req.headers.referer;
-	if (referer) {
-		clicksData.referer = referer;
+	let referrer = req.headers.referrer;
+	if (referrer) {
+		clicksData.referrer = new URL(referrer).hostname;
 	}
 
 	const IP = getClientIp(req);
