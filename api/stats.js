@@ -47,21 +47,31 @@ module.exports = async (req, res) => {
 	let totalClicks = data.clicks.length;
 	let uniqueClicks = new Set(data.clicks.map(c => c.ip)).size;
 	let countries = {};
+	let referrers = {};
 	data.clicks.forEach(c => {
-		if (!c.country_name) {
-			return;
+		if (c.country_name) {
+			if (!countries[c.country_name]) {
+				countries[c.country_name] = {
+					count: 0,
+					flag: c.flag ? `https://proxy.duckduckgo.com/iu/?u=${encodeURI(c.flag)}` : '',
+					name: c.country_name
+				};
+			}
+			countries[c.country_name].count++;
 		}
-		if (!countries[c.country_name]) {
-			countries[c.country_name] = {
-				count: 0,
-				flag: c.flag ? `https://proxy.duckduckgo.com/iu/?u=${encodeURI(c.flag)}` : '',
-				name: c.country_name
-			};
+		if (c.referrer) {
+			if (!referrers[c.referrer]) {
+				referrers[c.referrer] = {
+					name: c.referrer,
+					count: 0
+				};
+			}
+			referrers[c.referrer].count++;	
 		}
-		countries[c.country_name].count ++;
 	});
 
 	countries = Object.values(countries).sort((a, b) => b.count - a.count);
+	referrers = Object.values(referrers).sort((a, b) => b.count - a.count);
 
 	for (let i = 0; i < countries.length; i++) {
 		countries[i].position = i + 1;
@@ -74,7 +84,8 @@ module.exports = async (req, res) => {
 		created: (new Date(data.created.seconds * 1000)).toLocaleString(),
 		totalClicks,
 		uniqueClicks,
-		countries
+		countries,
+		referrers
 	});
 
 	return res.status(200).send(stats);

@@ -66,7 +66,7 @@ module.exports = async (req, res) => {
 		}
 	}
 
-	urlRef.update({
+	await urlRef.update({
 		clicks: FieldValue.arrayUnion(clicksData)
 	});
 

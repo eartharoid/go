@@ -56,6 +56,7 @@
 			// let data = await (await fetch(`/api/get?id=${ID}`)).json();
 			let data = {{&data}};
 			drawLocations(data);
+			drawReferrers(data);
 		}
 
 		function drawLocations(data) {
@@ -98,14 +99,57 @@
 
 			let chart = new google.visualization.PieChart(document.getElementById('locations-chart'));
         	chart.draw(table, {
-				width: '400px',
+				height: '400px',
 				backgroundColor: '#1F2424',
 				legend: {
-					// position: 'top',
+					position: 'labeled',
+					textStyle: {
+						color: 'white',
+					}
+				}
+			});
+		}
+
+		function drawReferrers(data) {
+			let refs = {};
+			data.clicks.forEach(c => {
+				if (!c.referrer) {
+					return;
+				}
+				if (!refs[c.referrer]) {
+					refs[c.referrer] = 0;
+				}
+				refs[c.referrer]++;		
+			});
+
+			let dataArray = [
+				['Referrer', 'Number'],
+			];
+
+			for (let r in refs) {
+				dataArray.push([r, refs[r]]);
+			}
+
+			console.log(dataArray)
+
+			let table = google.visualization.arrayToDataTable(dataArray);
+
+			let chart = new google.visualization.PieChart(document.getElementById('referrers-chart'));
+        	chart.draw(table, {
+				backgroundColor: '#1F2424',
+				legend: {
 					textStyle: {
 						color: 'white',
 						// fontSize: 16
 					}
+				},
+				title: 'Referrers',
+				titleTextStyle: {
+					color: 'white'
+				},
+				chartArea:{
+					width: '110%',
+					height: '110%'
 				}
 			});
 		}
@@ -210,7 +254,31 @@
 			</div>
 
 			<div id='tab2-container' class='tab-container'>
-				2
+				<div class='columns'>
+					<div class='column is-two-thirds'>
+						<div id='referrers-chart' class='graph'></div>
+					</div>
+					<div class='column'>
+						<div class='table-container'>
+							<table id='dataTable' class='table is-bordered is-striped is-hoverable is-fullwidth'>
+								<thead>
+									<tr>
+										<th>Referrer</th>
+										<th>Clicks</th>
+									</tr>
+								</thead>
+								<tbody>
+									{{#referrers}}
+									<tr>
+										<td><img src='https://www.google.com/s2/favicons?domain={{name}}' /> {{name}}</td>
+										<td>{{count}}</td>
+									</tr>
+									{{/referrers}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
 			</div>
 
 
