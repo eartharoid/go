@@ -36,6 +36,7 @@ module.exports = async (req, res) => {
 		data.created = (new Date(data.created.seconds * 1000)).toLocaleString();
 		data.stats = `${config.host}/${doc.id}+`;
 		data.preview = `${config.host}/${doc.id}~`;
+		data.truncated_url = data.url.substring(0, 40) + (data.url.length > 40 ? '...' : '');
 
 		links.push(data);
 	});
@@ -48,7 +49,7 @@ module.exports = async (req, res) => {
 		totalLinks: links.length,
 		totalClicks,
 		uniqueClicks,
-		clickers
+		clickers,
 	});
 
 	if (req.cookies && req.cookies.password === hash(process.env.ADMIN_PASSWORD)) {
