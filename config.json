@@ -1,6 +1,7 @@
 {
-	"collect": "ip,is_eu,city,region,region_code,country_name,country_code,continent_name,continent_code",
+	"collect": "ip,is_eu,city,region,region_code,country_name,country_code,continent_name,continent_code,flag",
 	"host": "https://go.eartharoid.me",
+	"gmaps_key": "AIzaSyAlxQR8OAUSOJqCV9N4hBqp9g9_XONydCw",
 	"random_length": 8,
 	"reserved": [
 		"admin",

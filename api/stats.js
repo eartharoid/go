@@ -1,5 +1,7 @@
 // get stats
 
+const config = require('../config.json');
+
 const { readFileSync } = require('fs');
 const { join } = require('path');
 
@@ -14,6 +16,8 @@ firebase.initializeApp({
 
 const db = firebase.firestore();
 const links = db.collection('urls');
+
+const mustache = require('mustache');
 
 module.exports = async (req, res) => {
 
@@ -36,6 +40,42 @@ module.exports = async (req, res) => {
 		});
 	}
 
-	return res.status(200)
-		.send(stats.replace(/%%ID%%/gmi, id));
+	let data = doc.data();
+	
+	delete data.ip;
+
+	let totalClicks = data.clicks.length;
+	let uniqueClicks = new Set(data.clicks.map(c => c.ip)).size;
+	let countries = {};
+	data.clicks.forEach(c => {
+		if (!c.country_name) {
+			return;
+		}
+		if (!countries[c.country_name]) {
+			countries[c.country_name] = {
+				count: 0,
+				flag: c.flag ? `https://proxy.duckduckgo.com/iu/?u=${encodeURI(c.flag)}` : '',
+				name: c.country_name
+			};
+		}
+		countries[c.country_name].count ++;
+	});
+
+	countries = Object.values(countries).sort((a, b) => b.count - a.count);
+
+	for (let i = 0; i < countries.length; i++) {
+		countries[i].position = i + 1;
+	}
+
+	stats = mustache.render(stats, {
+		data: JSON.stringify(data),
+		id,
+		api_key: config.gmaps_key,
+		created: (new Date(data.created.seconds * 1000)).toLocaleString(),
+		totalClicks,
+		uniqueClicks,
+		countries
+	});
+
+	return res.status(200).send(stats);
 };

@@ -35,6 +35,7 @@ module.exports = async (req, res) => {
 		data.clicks = data.clicks.length;
 		data.created = (new Date(data.created.seconds * 1000)).toLocaleString();
 		data.stats = `${config.host}/${doc.id}+`;
+		data.preview = `${config.host}/${doc.id}~`;
 
 		links.push(data);
 	});
