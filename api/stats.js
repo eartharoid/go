@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
 
 	let data = doc.data();
 	
-	delete data.ip;
+	delete data.creator;
 
 	let totalClicks = data.clicks.length;
 	let uniqueClicks = new Set(data.clicks.map(c => c.ip)).size;
