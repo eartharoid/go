@@ -5,5 +5,16 @@
 		{ "source": "/:id*\\+", "destination": "/api/stats?id=:id*" },
 		{ "source": "/:id*~", "destination": "/api/preview?id=:id*" },
 		{ "source": "/:id*", "destination": "/api/redirect?id=:id*" }
+	],
+	"headers": [
+		{
+			"source": "/(.*)",
+			"headers": [
+				{
+					"key": "Cache-Control",
+					"value": "no-cache"
+				}
+			]
+		}
 	]
 }
