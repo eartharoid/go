@@ -13,6 +13,8 @@ firebase.initializeApp({
 const db = firebase.firestore();
 
 module.exports = async (req, res) => {
+	res.setHeader('Cache-Control', 's-maxage=1');
+	res.setHeader('Pragma', 'no-cache');
 
 	let { password } = req.query;
 

@@ -23,6 +23,8 @@ const db = firebase.firestore();
 const mustache = require('mustache');
 
 module.exports = async (req, res) => {
+	res.setHeader('Cache-Control', 's-maxage=1');
+	res.setHeader('Pragma', 'no-cache');
 
 	const { id } = req.query;
 
