@@ -19,8 +19,6 @@ let login = readFileSync(join(__dirname, '../templates/login.html'), 'utf8');
 
 
 module.exports = async (req, res) => {
-	res.setHeader('Cache-Control', 's-maxage=1');
-	res.setHeader('Pragma', 'no-cache');
 
 	let links = [];
 	let totalClicks = 0;

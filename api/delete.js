@@ -13,8 +13,6 @@ const db = firebase.firestore();
 const links = db.collection('urls');
 
 module.exports = async (req, res) => {
-	res.setHeader('Cache-Control', 's-maxage=1');
-	res.setHeader('Pragma', 'no-cache');
 
 	if (!req.body) {
 		return res.status(400).json({

@@ -20,8 +20,6 @@ const links = db.collection('urls');
 const mustache = require('mustache');
 
 module.exports = async (req, res) => {
-	res.setHeader('Cache-Control', 's-maxage=1');
-	res.setHeader('Pragma', 'no-cache');
 
 	let { id } = req.query;
 
