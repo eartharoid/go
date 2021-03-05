@@ -10,7 +10,7 @@ YOURLS is good, but:
 2. It requires a server (mostly this)
 3. It's ugly (although less with Sleeky)
 
-This is a serverless, and most importantly, free (to operate) alternative that looks better. Includes a basic admin dashboard, link preview pages (append `~`), and link stats pages (appent `+`).
+This is a serverless, and most importantly, free (to operate) alternative that looks better. Includes a basic admin dashboard, link preview pages (append `~`), and link stats pages (append `+`).
 
 ## Screenshots
 
