@@ -37,7 +37,14 @@ function shorten(e, form) {
 		.then(data => {
 			if (data.success) {
 				errorMessage.style.display = 'none';
-				successQR.href = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${data.short}`;
+				successQR.onclick = () => {
+					const window = window.open('about:blank');
+					let image = new Image();
+					image.src = QRCode.generatePNG(data.short);
+					setTimeout(function() {
+						window.document.write(image.outerHTML);
+					}, 0);
+				}
 				successMessage.style.display = 'block';
 				shortURL.value = data.short;
 				shortURL.select();
