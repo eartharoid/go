@@ -19,6 +19,8 @@ const links = db.collection('urls');
 
 const mustache = require('mustache');
 
+const timeago = require('timeago.js');
+
 module.exports = async (req, res) => {
 
 	let { id } = req.query;
@@ -79,7 +81,7 @@ module.exports = async (req, res) => {
 	}
 
 	let created = new Date(data.created.seconds * 1000);
-	let daysAgo = Math.ceil((new Date().getTime() - created.getTime()) / (1000 * 3600 * 24));
+	let daysAgo = timeago.format(created.getTime());
 
 	stats = mustache.render(stats, {
 		data: JSON.stringify(data),

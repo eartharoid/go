@@ -54,6 +54,16 @@
 					Create a new short URL
 				</span>
 			</a>
+			<br/>
+			<a class='button is-small my-5 is-outlined is-link' onClick='javascript:logout()'>
+				<span class='icon'>
+					<i class='fas fa-long-arrow-alt-left'></i>
+					<!-- <i class='fas fa-chevron-left'></i> -->
+				</span>
+				<span>
+					Logout
+				</span>
+			</a>
 
 			<div class='level'>
 				<div class='level-item has-text-centered'>
@@ -228,6 +238,12 @@
 						}
 					});
 			}
+		}
+	</script>
+	<script>
+		function logout() {
+			document.cookie = 'password=; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+			window.location.href = '/';
 		}
 	</script>
 </body>
