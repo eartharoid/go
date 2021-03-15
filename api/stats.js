@@ -89,7 +89,7 @@ module.exports = async (req, res) => {
 		api_key: config.gmaps_key,
 		created: created.toLocaleString(),
 		daysAgo,
-		dailyClicks: Math.round(totalClicks / daysAgo),
+		dailyClicks: Math.round(totalClicks / Math.ceil((new Date().getTime() - created.getTime()) / (1000 * 3600 * 24))),
 		totalClicks,
 		uniqueClicks,
 		countries,
