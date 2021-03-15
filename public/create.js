@@ -38,11 +38,11 @@ function shorten(e, form) {
 			if (data.success) {
 				errorMessage.style.display = 'none';
 				successQR.onclick = () => {
-					const window = window.open('about:blank');
+					const qrWindow = window.open('about:blank');
 					let image = new Image();
 					image.src = QRCode.generatePNG(data.short);
 					setTimeout(function() {
-						window.document.write(image.outerHTML);
+						qrWindow.document.write(image.outerHTML);
 					}, 0);
 				}
 				successMessage.style.display = 'block';
