@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 const button = document.getElementById('button');
 const copyButton = document.getElementById('copy');
 const errorMessage = document.getElementById('errorMessage');
@@ -44,7 +46,7 @@ function shorten(e, form) {
 					setTimeout(function() {
 						qrWindow.document.write(image.outerHTML);
 					}, 0);
-				}
+				};
 				successMessage.style.display = 'block';
 				shortURL.value = data.short;
 				shortURL.select();

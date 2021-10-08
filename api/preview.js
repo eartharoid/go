@@ -23,7 +23,6 @@ const db = firebase.firestore();
 const mustache = require('mustache');
 
 module.exports = async (req, res) => {
-
 	const { id } = req.query;
 
 	if (!id) {
@@ -48,18 +47,20 @@ module.exports = async (req, res) => {
 
 	const IP = getClientIp(req);
 	if (IP && config.collect.length > 1 && process.env.IPDATA_KEY) {
-		let apiURL = `https://api.ipdata.co/${IP}?api-key=${process.env.IPDATA_KEY}&fields=${config.collect}`;
-		let data = await (await fetch(apiURL)).json();
+		const apiURL = `https://api.ipdata.co/${IP}?api-key=${process.env.IPDATA_KEY}&fields=${config.collect}`;
+		const data = await (await fetch(apiURL)).json();
 
 		if (!data.message) {
 			if (regex.collectIP.test(config.collect)) {
 				data.ip = hash(data.ip).replace(/\//g, '');
 				const userRef = db.doc(`clickers/${data.ip}`);
 				const doc = await userRef.get();
+
 				if (!doc.exists) {
 					await userRef.set(data);
 				}
 			}
+
 			for (let field in data) {
 				clicksData[field] = data[field];
 			}
@@ -72,7 +73,7 @@ module.exports = async (req, res) => {
 
 	console.log(`Displaying ${id} preview to ${IP}`);
 
-	let data = doc.data();
+	const data = doc.data();
 
 	preview = mustache.render(preview, {
 		id,

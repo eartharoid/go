@@ -5,7 +5,6 @@ const { hash } = require('../functions.js');
 
 const firebase = require('firebase-admin');
 
-
 firebase.initializeApp({
 	credential: firebase.credential.cert(JSON.parse(process.env.FIREBASE))
 });
@@ -14,8 +13,7 @@ const db = firebase.firestore();
 const links = db.collection('urls');
 
 module.exports = async (req, res) => {
-
-	let { password, id } = req.query;
+	const { password, id } = req.query;
 
 	if (password !== process.env.ADMIN_PASSWORD
 		&& req.cookies.password !== hash(process.env.ADMIN_PASSWORD)
@@ -44,7 +42,7 @@ module.exports = async (req, res) => {
 		});
 	}
 
-	let data = doc.data();
+	const data = doc.data();
 	data.short = `${config.host}/${id}`;
 
 	res.status(200).json(data);

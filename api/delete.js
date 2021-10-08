@@ -4,7 +4,6 @@ const { hash } = require('../functions.js');
 
 const firebase = require('firebase-admin');
 
-
 firebase.initializeApp({
 	credential: firebase.credential.cert(JSON.parse(process.env.FIREBASE))
 });
@@ -13,7 +12,6 @@ const db = firebase.firestore();
 const links = db.collection('urls');
 
 module.exports = async (req, res) => {
-
 	if (!req.body) {
 		return res.status(400).json({
 			status: 400,
