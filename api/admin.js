@@ -19,7 +19,6 @@ let login = readFileSync(join(__dirname, '../templates/login.html'), 'utf8');
 
 
 module.exports = async (req, res) => {
-
 	let links = [];
 	let totalClicks = 0;
 	let uniqueClicks = 0;
@@ -70,5 +69,4 @@ module.exports = async (req, res) => {
 		res.setHeader('Set-Cookie', `password=${hash(password)}`);
 		return res.status(200).send(admin);
 	}
-
 };

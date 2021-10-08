@@ -10,6 +10,7 @@ module.exports = {
 				.digest('base64');
 		}
 	},
+
 	random(length = config.random_length) {
 		let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 		let str = '';

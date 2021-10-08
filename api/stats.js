@@ -9,7 +9,6 @@ let stats = readFileSync(join(__dirname, '../templates/stats.html'), 'utf8');
 
 const firebase = require('firebase-admin');
 
-
 firebase.initializeApp({
 	credential: firebase.credential.cert(JSON.parse(process.env.FIREBASE))
 });
@@ -22,7 +21,6 @@ const mustache = require('mustache');
 const timeago = require('timeago.js');
 
 module.exports = async (req, res) => {
-
 	let { id } = req.query;
 
 	if (!id) {
