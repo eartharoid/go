@@ -8,7 +8,7 @@ YOURLS is good, but:
 
 1. It's PHP (ew)
 2. It requires a server (mostly this)
-3. It's ugly (although less with Sleeky)
+3. It's ugly (although less with [Sleeky](https://github.com/Flynntes/Sleeky))
 
 This is a serverless, and most importantly, free (to operate) alternative that looks better. Includes a basic admin dashboard, link preview pages (append `~`), and link stats pages (append `+`).
 
