@@ -1,33 +1,20 @@
 {
-  "name": "eartharoid-go",
-  "version": "1.0.0",
-  "description": "A serverless URL shortener",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eartharoid/go.git"
-  },
-  "keywords": [
-    "vercel",
-    "firestore",
-    "firebase",
-    "serverless",
-    "url",
-    "shortener"
-  ],
-  "author": "eartharoid",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/eartharoid/go/issues"
-  },
-  "homepage": "https://github.com/eartharoid/go#readme",
-  "dependencies": {
-    "@supercharge/request-ip": "^1.1.2",
-    "firebase-admin": "^10.0.2",
-    "mustache": "^4.2.0",
-    "node-fetch": "^2.6.7",
-    "timeago.js": "^4.0.2"
-  }
+	"name": "@eartharoid/go",
+	"private": true,
+	"version": "2.0.0",
+	"description": "A serverless alternative to YOURLS.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "eartharoid",
+	"license": "MIT",
+	"devDependencies": {
+		"eslint": "^8.15.0"
+	},
+	"dependencies": {
+		"itty-router": "^2.1.9",
+		"mustache": "^4.2.0",
+		"qr-image": "^3.2.0"
+	}
 }

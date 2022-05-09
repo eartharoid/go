@@ -1,5 +1,4 @@
-.vercel
+dist/
 node_modules/
-
-firebase.json
+worker/
 .env

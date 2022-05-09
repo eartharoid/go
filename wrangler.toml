@@ -1,0 +1,18 @@
+name = "go"
+type = "webpack"
+main = "./index,js"
+route = "lnk.earth/*"
+account_id = "97b58167ff9c21fe35e878e6a65654f8"
+zone_id = "1cd363042a1570c56829891f5b1e22df"
+usage_model = ""
+compatibility_flags = []
+workers_dev = true
+compatibility_date = "2022-05-09"
+kv_namespaces = [ 
+    { binding = "LINKS", id = "a20a750b6ea949aeaa3a125e13670564", preview_id="a20a750b6ea949aeaa3a125e13670564" }
+]
+
+[vars]
+	UMAMI = "https://umami.eartharoid.me"
+	UMAMI_SITE_ID = "95c487c4-c699-4754-9cdd-e1fe839a6de7"
+	UMAMI_SHARE = "0WGJagdm"
