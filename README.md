@@ -1,25 +1,22 @@
-# eartharoid-go
+# eartharoid:go
 
-A serverless URL shortener, made with Vercel and Firestore (I was going to use FaunaDB but it was too complicated 😦).
+Originally made in January 2021, as a serverless replacement for YOURLS, with Vercel & Firebase/Firestore.
+The UI never really worked properly due to Vercel's caching, and became quite slow with all the unnecessary click data in the database. 
 
-## Why I made it
+![January 2021 - May 2022 stats](https://static.eartharoid.me/k/22/05/09223553.png)
 
-YOURLS is good, but:
+To view the code and read more about the original version, switch to the [v1 branch](https://github.com/eartharoid/go/tree/v1).
 
-1. It's PHP (ew)
-2. It requires a server (mostly this)
-3. It's ugly (although less with [Sleeky](https://github.com/Flynntes/Sleeky))
+## How it works
 
-This is a serverless, and most importantly, free (to operate) alternative that looks better. Includes a basic admin dashboard, link preview pages (append `~`), and link stats pages (append `+`).
+It uses Cloudflare Workers, and URLs are stored in KV. This is my first Cloudflare Workers & KV project. There's no UI or even an API for managing URLs currently (because I rarely need to shorten a URL quickly), so links must be added either via the Cloudflare Dashboard, or the wrangler CLI.
 
-## Screenshots
+It uses [umami](https://umami.is) for privacy-friendly analytics/stats.
 
-See the [**Imgur album**](https://imgur.com/a/ZR0YXMg) for screenshots of the different pages.
+### Routes
 
-[![Imgur album](https://i.imgur.com/jJf6syj.png)](https://imgur.com/a/ZR0YXMg)
-
-## Instructions
-
-You need to create a [Google Cloud IAM service account](https://console.cloud.google.com/iam-admin/serviceaccounts), download the JSON key, minify the json, and set it as a variable called `FIREBASE` in Vercel. Create a Google API key for Google Maps under the same cloud project. Go to the [Firebase console](https://console.firebase.google.com/), setup Firestore, and add two collections: `urls` and `clickers`. You can set the ``ADMIN_PASSWORD`` variable to lock the dashboard and creation of URLs.
-
-An IPData.co API key is also required for stats. This doesn't track users, but it does store the location each redirect request came from.
+- `/:id.png` -> Generate a QR code
+- `/:id+` -> Redirect to umami
+- `/:id~` -> Show the link preview page
+- `/:id` -> Redirect to long URL
+- `/*` -> Redirect to `eartharoid.me`
