@@ -1,9 +1,8 @@
 name = "go"
 type = "webpack"
-main = "./index,js"
+main = "./index.js"
 route = "lnk.earth/*"
 account_id = "97b58167ff9c21fe35e878e6a65654f8"
-zone_id = "1cd363042a1570c56829891f5b1e22df"
 usage_model = "bundled"
 compatibility_flags = []
 workers_dev = true
