@@ -2,6 +2,8 @@ import { Router } from 'itty-router';
 import qr from 'qr-image';
 import { render } from 'mustache';
 
+const CACHE_FOR = 3600;
+
 const getRef = request => {
 	const { headers } = request;
 	let ref = headers.get('Referer') || headers.get('Origin');
@@ -45,8 +47,9 @@ router.get('/', request => {
 	return Response.redirect('https://eartharoid.me', 302);
 });
 
+router.get('/favicon.ico', () => Response.redirect('https://eartharoid.me/favicon.ico', 301));
+
 router.get('/:id.png', request => {
-	// umami(request); // don't send this
 	const id = decodeURIComponent(request.params.id);
 	const host = request.headers.get('Host');
 	const image = qr.imageSync(`https://${host}/${id}`, {
@@ -57,37 +60,53 @@ router.get('/:id.png', request => {
 });
 
 router.get('/:id\\~', async request => {
-	umami(request);
 	const id = decodeURIComponent(request.params.id);
-	const long = await LINKS.get(id, { cacheTtl: 3600 });
-	if (!long) return Response.redirect('https://eartharoid.me', 302); // invalid
-	const { hostname } = new URL(long);
-	let html = await (await fetch('https://static.lnk.earth/preview.html')).text();
-	html = render(html, {
-		hostname,
-		id,
-		long,
+	const long = await LINKS.get(id, { cacheTtl: CACHE_FOR });
+	let html, status;
+
+	if (!long) {
+		html = await (await fetch('https://static.lnk.earth/invalid.html')).text();
+		html = render(html, { id });
+		status = 404;
+	} else {
+		umami(request);
+		const { hostname } = new URL(long);
+		html = await (await fetch('https://static.lnk.earth/preview.html')).text();
+		html = render(html, {
+			hostname,
+			id,
+			long,
+		});
+		status = 200;
+	}
+
+	return new Response(html, {
+		headers: { 'content-type': 'text/html;charset=UTF-8' },
+		status,
 	});
-	return new Response(html, { headers: { 'content-type': 'text/html;charset=UTF-8' } });
 });
 
-router.get('/:id\\+', request => {
-	// umami(request); // don't send this
-	const id = decodeURIComponent(request.params.id);
-	return Response.redirect(`${UMAMI}/share/${UMAMI_SHARE}?url=%2F${request.params.id}`, 302);
-});
+router.get('/:id\\+', request => Response.redirect(`${UMAMI}/share/${UMAMI_SHARE}?url=%2F${request.params.id}`, 302));
 
 router.get('/:id', async request => {
-	umami(request);
 	const id = decodeURIComponent(request.params.id);
-	const long = await LINKS.get(id, { cacheTtl: 3600 });
-	if (!long) return Response.redirect('https://eartharoid.me', 302); // invalid
-	return Response.redirect(long, 302);
+	const long = await LINKS.get(id, { cacheTtl: CACHE_FOR });
+
+	if (!long) {
+		let html = await (await fetch('https://static.lnk.earth/invalid.html')).text();
+		html = render(html, { id });
+		return new Response(html, {
+			headers: { 'content-type': 'text/html;charset=UTF-8' },
+			status: 404,
+		});
+	} else {
+		umami(request);
+		return Response.redirect(long, 302);
+	}
 });
 
 router.all('*', () =>
-	// umami(request); // don't send this
-	 Response.redirect('https://eartharoid.me', 302),
+	Response.redirect('https://eartharoid.me', 302),
 );
 
 addEventListener('fetch', event => {
