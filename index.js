@@ -43,7 +43,7 @@ const umami = request => {
 const router = Router();
 
 router.get('/', request => {
-	umami(request);
+	// umami(request);
 	return Response.redirect('https://eartharoid.me', 302);
 });
 
