@@ -1,5 +1,4 @@
 name = "go"
-type = "webpack"
 main = "./index.js"
 route = "lnk.earth/*"
 account_id = "97b58167ff9c21fe35e878e6a65654f8"
@@ -7,6 +6,7 @@ usage_model = "bundled"
 compatibility_flags = []
 workers_dev = true
 compatibility_date = "2022-05-09"
+node_compat = true
 kv_namespaces = [ 
     { binding = "LINKS", id = "a20a750b6ea949aeaa3a125e13670564", preview_id="a20a750b6ea949aeaa3a125e13670564" }
 ]

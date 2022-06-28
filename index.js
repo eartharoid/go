@@ -1,6 +1,8 @@
+/* eslint-disable no-undef */
+
 import { Router } from 'itty-router';
 import qr from 'qr-image';
-import { render } from 'mustache';
+import Mustache from 'mustache';
 
 const CACHE_FOR = 3600;
 
@@ -8,6 +10,7 @@ const getRef = request => {
 	const { headers } = request;
 	let ref = headers.get('Referer') || headers.get('Origin');
 	if (ref) ref = ref.replace(/^http(s)?:\/\//gi, '').replace(/(\?.*)|#.*/g, '');
+	console.log(ref);
 	return ref;
 };
 
@@ -42,10 +45,7 @@ const umami = request => {
 
 const router = Router();
 
-router.get('/', request => {
-	// umami(request);
-	return Response.redirect('https://eartharoid.me', 302);
-});
+router.get('/', () => Response.redirect('https://eartharoid.me', 302));
 
 router.get('/favicon.ico', () => Response.redirect('https://eartharoid.me/favicon.ico', 301));
 
@@ -60,22 +60,22 @@ router.get('/:id.png', request => {
 });
 
 router.get('/:id\\~', async request => {
-	const id = decodeURIComponent(request.params.id);
+	const [id, addon] = decodeURIComponent(request.params.id).split(':');
 	const long = await LINKS.get(id, { cacheTtl: CACHE_FOR });
 	let html, status;
 
 	if (!long) {
 		html = await (await fetch('https://static.lnk.earth/invalid.html')).text();
-		html = render(html, { id });
+		html = Mustache.render(html, { id });
 		status = 404;
 	} else {
 		umami(request);
 		const { hostname } = new URL(long);
 		html = await (await fetch('https://static.lnk.earth/preview.html')).text();
-		html = render(html, {
+		html = Mustache.render(html, {
 			hostname,
-			id,
-			long,
+			id: addon ? id + ':' + addon : id,
+			long: addon ? long + '#' + addon : long,
 		});
 		status = 200;
 	}
@@ -89,19 +89,19 @@ router.get('/:id\\~', async request => {
 router.get('/:id\\+', request => Response.redirect(`${UMAMI}/share/${UMAMI_SHARE}?url=%2F${request.params.id}`, 302));
 
 router.get('/:id', async request => {
-	const id = decodeURIComponent(request.params.id);
+	const [id, addon] = decodeURIComponent(request.params.id).split(':');
 	const long = await LINKS.get(id, { cacheTtl: CACHE_FOR });
 
 	if (!long) {
 		let html = await (await fetch('https://static.lnk.earth/invalid.html')).text();
-		html = render(html, { id });
+		html = Mustache.render(html, { id });
 		return new Response(html, {
 			headers: { 'content-type': 'text/html;charset=UTF-8' },
 			status: 404,
 		});
 	} else {
 		umami(request);
-		return Response.redirect(long, 302);
+		return Response.redirect(addon ? long + '#' + addon : long, 302);
 	}
 });
 
