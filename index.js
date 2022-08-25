@@ -91,7 +91,7 @@ router.get('/:id\\+', request => Response.redirect(`${UMAMI}/share/${UMAMI_SHARE
 
 router.get('/:id', async request => {
 	let [id, addon] = decodeURIComponent(request.params.id).split(':');
-	let id = id.replaceAll('-', '').toLowerCase()
+	id = id.replaceAll('-', '').toLowerCase()
 	const long = await LINKS.get(id, { cacheTtl: CACHE_FOR });
 
 	if (!long) {
