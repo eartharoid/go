@@ -60,8 +60,9 @@ router.get('/:id.png', request => {
 });
 
 router.get('/:id\\~', async request => {
-	const [id, addon] = decodeURIComponent(request.params.id).split(':');
-	const long = await LINKS.get(id.replaceAll('-', ''), { cacheTtl: CACHE_FOR });
+	let [id, addon] = decodeURIComponent(request.params.id).split(':');
+	id = id.replaceAll('-', '').toLowerCase();
+	const long = await LINKS.get(id, { cacheTtl: CACHE_FOR });
 	let html, status;
 
 	if (!long) {
@@ -89,8 +90,9 @@ router.get('/:id\\~', async request => {
 router.get('/:id\\+', request => Response.redirect(`${UMAMI}/share/${UMAMI_SHARE}?url=%2F${request.params.id}`, 302));
 
 router.get('/:id', async request => {
-	const [id, addon] = decodeURIComponent(request.params.id).split(':');
-	const long = await LINKS.get(id.replaceAll('-', ''), { cacheTtl: CACHE_FOR });
+	let [id, addon] = decodeURIComponent(request.params.id).split(':');
+	let id = id.replaceAll('-', '').toLowerCase()
+	const long = await LINKS.get(id, { cacheTtl: CACHE_FOR });
 
 	if (!long) {
 		let html = await (await fetch('https://static.lnk.earth/invalid.html')).text();
